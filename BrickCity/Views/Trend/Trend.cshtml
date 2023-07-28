@@ -1,0 +1,45 @@
+﻿@using BrickCity.Models.EFEntity
+@model TrendGraph
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<script src="/js/highcharts.js"></script>
+<script src="/js/exporting.js"></script>
+
+
+
+<form method="post" class="m-2">
+    <label for="FileID">Выберите файл: </label>
+    <select name="FileID" id="FileID">
+        @foreach (FileModel file in ViewBag.files)
+        {
+            @if (file == Model.SelectedFile)
+            {
+                <option value="@file.FileModelID" selected>
+                    @file.Name
+                </option>
+            }
+            else
+            {
+                <option value="@file.FileModelID">
+                    @file.Name
+                </option>
+            }
+        }
+    </select> <br>
+
+    <input type="submit" value="Обновить">
+</form>
+
+@using Highsoft.Web.Mvc.Charts
+@using Highsoft.Web.Mvc.Charts.Rendering
+
+
+@{
+    var housesRenderer = new HighchartsRenderer(Model.GetLineTrendGraph(Consumer_Type.House));
+    var plantsRenderer = new HighchartsRenderer(Model.GetLineTrendGraph(Consumer_Type.Plant));
+}
+@Html.Raw(housesRenderer.RenderHtml())
+
+@Html.Raw(plantsRenderer.RenderHtml())

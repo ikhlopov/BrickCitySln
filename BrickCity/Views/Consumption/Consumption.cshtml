@@ -1,0 +1,47 @@
+﻿@using BrickCity.Models.EFEntity;
+@model ConsumptionAreaGraph
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<script src="/js/highcharts.js"></script>
+<script src="/js/exporting.js"></script>
+
+
+
+<form method="post" class="m-2">
+    <label for="FileID">Выберите файл: </label>
+    <select name="FileID" id="FileID">
+        @foreach(FileModel file in ViewBag.files)
+        {
+            @if (file == Model.SelectedFile)
+            {
+                <option value="@file.FileModelID" selected>
+                    @file.Name
+                </option>
+            }
+            else
+            {
+                <option value="@file.FileModelID">
+                    @file.Name
+                </option>
+            }
+        }
+    </select> <br>
+
+    <label>Выберите интервал для построения графика: </label>
+    <input type="date" id="fromDate" name="fromDate" value="@Model.FromDateString" />
+    <label> - </label>
+    <input type="date" id="toDate" name="toDate" value="@Model.ToDateString" /> <br>
+    <input type="submit" value="Обновить">
+</form>
+
+@using Highsoft.Web.Mvc.Charts
+@using Highsoft.Web.Mvc.Charts.Rendering
+
+
+@{
+    var renderer = new HighchartsRenderer(Model.Graph);
+}
+@Html.Raw(renderer.RenderHtml())

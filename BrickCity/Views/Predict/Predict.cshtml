@@ -1,0 +1,61 @@
+﻿@using BrickCity.Models.EFEntity
+@model PredictModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<form method="post" class="m-2">
+    <label for="FileID">Выберите файл: </label>
+    <select name="FileID" id="FileID">
+        @foreach (FileModel file in ViewBag.files)
+        {
+            @if (file == Model.SelectedFile)
+            {
+                <option value="@file.FileModelID" selected>
+                    @file.Name
+                </option>
+            }
+            else
+            {
+                <option value="@file.FileModelID">
+                    @file.Name
+                </option>
+            }
+        }
+    </select> <br>
+
+    <label>Выберите дату для построения прогноза на следующий день: </label>
+    <input type="date" id="predictDate" name="predictDate" value="@ViewBag.predictDate.ToString("yyyy-MM-dd")" />
+    <input type="submit" value="Обновить">
+
+    <div>
+        <table class="table table-bordered table-striped table-sm">
+            <thead>
+                <tr>
+                    <th>Имя</th>
+                    <th>Прогноз</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var house in Model.Houses)
+                {
+                    <tr>
+                        <td>@house.Name</td>
+                        <td>@Model.house_predict(house)</td>
+                    </tr>
+
+                }
+                @foreach (var plant in Model.Plants)
+                {
+                    <tr>
+                        <td>@plant.Name</td>
+                        <td>@Model.plant_predict(plant)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</form>
+
